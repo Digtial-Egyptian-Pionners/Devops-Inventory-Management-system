@@ -1,0 +1,12 @@
+# Rename to backend.tf once you create an S3 bucket for shared Terraform state
+# (required for CI/CD and team collaboration).
+#
+# terraform {
+#   backend "s3" {
+#     bucket       = "apex-inventory-terraform-state"
+#     key          = "dev/terraform.tfstate"
+#     region       = "eu-west-3"
+#     use_lockfile = true
+#     encrypt      = true
+#   }
+# }
