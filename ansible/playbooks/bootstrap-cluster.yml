@@ -1,0 +1,20 @@
+---
+- name: Prepare all Kubernetes nodes (OS & CRI & Binaries)
+  hosts: k8s_cluster
+  become: true
+  roles:
+    - common
+    - containerd
+    - k8s_base
+
+- name: Initialize Kubernetes Master Node
+  hosts: k8s_master
+  become: true
+  roles:
+    - k8s_master
+
+- name: Join Kubernetes Worker Nodes
+  hosts: k8s_workers
+  become: true
+  roles:
+    - k8s_worker

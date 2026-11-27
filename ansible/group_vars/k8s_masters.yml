@@ -1,0 +1,3 @@
+---
+kubeadm_ignore_preflight_errors: "NumCPU,Mem"
+kubeconfig_dest: "/home/ubuntu/.kube/config"

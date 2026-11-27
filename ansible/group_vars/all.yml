@@ -1,0 +1,12 @@
+---
+project_name: apex-inventory
+environment_name: dev
+aws_region: eu-west-3
+
+# Kubernetes & Runtime Versions
+k8s_version: "1.31"
+k8s_repo_url: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/"
+pod_network_cidr: "10.244.0.0/16"
+service_cidr: "10.96.0.0/12"
+cni_plugin: "flannel"
+flannel_manifest_url: "https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml"
