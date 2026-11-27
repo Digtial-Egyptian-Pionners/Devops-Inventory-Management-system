@@ -1,0 +1,43 @@
+---
+- name: Install PostgreSQL client and AWS CLI on Bastion
+  ansible.builtin.apt:
+    name:
+      - postgresql-client
+      - awscli
+      - unzip
+    state: present
+    update_cache: true
+
+- name: Download kubectl binary
+  ansible.builtin.get_url:
+    url: "https://dl.k8s.io/release/{{ kubectl_version }}/bin/linux/amd64/kubectl"
+    dest: /usr/local/bin/kubectl
+    mode: "0755"
+
+- name: Download Helm installation script
+  ansible.builtin.get_url:
+    url: "{{ helm_install_script_url }}"
+    dest: /tmp/get_helm.sh
+    mode: "0700"
+
+- name: Install Helm 3
+  ansible.builtin.command: /tmp/get_helm.sh
+  args:
+    creates: /usr/local/bin/helm
+
+- name: Create .kube directory on Bastion for ubuntu user
+  ansible.builtin.file:
+    path: /home/ubuntu/.kube
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: "0755"
+
+- name: Copy cluster kubeconfig to Bastion if available locally
+  ansible.builtin.copy:
+    src: /tmp/apex-admin.conf
+    dest: /home/ubuntu/.kube/config
+    owner: ubuntu
+    group: ubuntu
+    mode: "0600"
+  when: lookup('ansible.builtin.fileglob', '/tmp/apex-admin.conf') | length > 0

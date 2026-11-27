@@ -1,0 +1,7 @@
+---
+- name: Join worker node to Kubernetes cluster
+  ansible.builtin.command: >
+    {{ hostvars[groups['k8s_master'][0]]['k8s_master_join_command'] }}
+    --ignore-preflight-errors={{ kubeadm_ignore_preflight_errors }}
+  args:
+    creates: /etc/kubernetes/kubelet.conf

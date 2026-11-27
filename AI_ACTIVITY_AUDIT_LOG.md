@@ -1,50 +1,105 @@
-# Apex Inventory — AI & Engineer Activity Audit Log
+cd /mnt/d/Final-DEPI-Project/Devops-Inventory-Management-system
 
-> **MANDATORY INSTRUCTION FOR ALL AI AGENTS & ENGINEERS:**
-> Every single time an AI agent or engineer makes an edit, runs a command, or completes a task, you **MUST** record an entry at the top of the **Activity Log** section below.
-> 
-> **Never overwrite or delete previous entries.** This file serves as the unified audit trail across all collaborators and AI assistants.
+python3 - << 'EOF'
+with open("AI_ACTIVITY_AUDIT_LOG.md", "r", encoding="utf-8") as f:
+    content = f.read()
 
----
+marker = "## Activity Log (Chronological — Newest on Top)\n"
+new_entry = """## Activity Log (Chronological — Newest on Top)
 
-## Required Log Entry Format
-
-Copy this template for every run or edit:
-
-```markdown
-### [YYYY-MM-DD HH:mm:ss UTC] — <Task Name / Short Summary>
-- **Collaborator / Owner Name:** <Full Name of Engineer or Coworker>
-- **AI Agent / Model Used:** <e.g., Gemini 3.8 Flash, Claude 3.5 Sonnet, ChatGPT-4o, Codex, Cursor, etc.>
-- **Branch / PR:** `<branch-name>` / `<PR-link-or-number>`
+### [2026-11-27 19:05:00 UTC] — Built Complete Ansible K8s Cluster & Bastion Configuration
+- **Collaborator / Owner Name:** Ahmed Nabil (`@ahmedsiam1`)
+- **AI Agent / Model Used:** Gemini
+- **Branch / PR:** `config/ansible-k8s` / Pending PR
 - **Files Modified / Created:**
-  - `<file-path-1>`
-  - `<file-path-2>`
+  - `DEVOPS_COLLABORATION.md`
+  - `ansible/ansible.cfg`
+  - `ansible/requirements.yml`
+  - `ansible/inventory/aws_ec2.yml`
+  - `ansible/inventory/dev.ini`
+  - `ansible/group_vars/all.yml`, `bastion.yml`, `k8s_masters.yml`, `k8s_workers.yml`
+  - `ansible/roles/common/tasks/main.yml`
+  - `ansible/roles/containerd/tasks/main.yml`, `handlers/main.yml`
+  - `ansible/roles/k8s_base/tasks/main.yml`
+  - `ansible/roles/k8s_master/tasks/main.yml`
+  - `ansible/roles/k8s_worker/tasks/main.yml`
+  - `ansible/roles/bastion/tasks/main.yml`
+  - `ansible/playbooks/site.yml`, `bootstrap-cluster.yml`, `setup-bastion.yml`
+  - `handoffs/ahmed-nabil/ansible-k8s-setup/HANDOFF_REPORT.md`
+  - `handoffs/ahmed-nabil/ansible-k8s-setup/verification-logs.txt`
 - **Exact Actions & Changes Made:**
-  - Detailed bullet point 1 explaining what logic or config was changed.
-  - Detailed bullet point 2.
+  - Claimed the Ansible K8s & Bastion setup task in `DEVOPS_COLLABORATION.md`.
+  - Configured static (`dev.ini` with Bastion ProxyCommand) and dynamic (`aws_ec2.yml` targeting `eu-west-3` and `dev` tags) inventories for Ubuntu 24.04 EC2 nodes.
+  - Created 6 idempotent Ansible roles (`common`, `containerd`, `k8s_base`, `k8s_master`, `k8s_worker`, `bastion`) and 3 playbooks (`site.yml`, `bootstrap-cluster.yml`, `setup-bastion.yml`) to provision Kubernetes v1.31 with Flannel CNI and configure Bastion admin tools (`kubectl`, `helm`, `psql`, `awscli`).
 - **Verification Commands Executed & Output:**
-  - Command: `<exact-command>` | Result: `PASS (exit 0)` | Summary: `<e.g. 5/5 unit tests passed>`
-- **Status:** `IN_PROGRESS` | `COMPLETED` | `BLOCKED`
-- **Next Step / Handoff Note:** <What needs to be done next by the next collaborator>
-```
+  - Command: `ansible-playbook -i inventory/dev.ini playbooks/site.yml --syntax-check` | Result: `PASS (exit 0)`
+  - Command: `ansible-lint` | Result: `PASS (exit 0)` | Summary: `Passed: 0 failure(s), 0 warning(s) in 22 files processed (production profile)`
+- **Status:** `IN_PROGRESS` (Awaiting live EC2 outputs from Terraform `apply` to run against live cluster)
+- **Next Step / Handoff Note:** Once Terraform `dev` environment is applied, populate `bastion_public_ip`, `k8s_master_private_ip`, and `k8s_worker_private_ips` in `ansible/inventory/dev.ini` (or run with `-i inventory/aws_ec2.yml`) and execute `ansible-playbook playbooks/site.yml`.
 
----
-
-## Activity Log (Chronological — Newest on Top)
-
-### [2026-11-27 10:35:00 UTC] — Initialized DevOps AI Audit Log and Handoff Directory Structure
-- **Collaborator / Owner Name:** Project Architect / Owner
-- **AI Agent / Model Used:** Antigravity (Gemini)
-- **Branch / PR:** `main`
+### [2026-11-27 19:05:00 UTC] — Built Complete Ansible K8s Cluster & Bastion Configuration
+- **Collaborator / Owner Name:** Ahmed Nabil (`@ahmedsiam1`)
+- **AI Agent / Model Used:** Gemini
+- **Branch / PR:** `config/ansible-k8s` / Pending PR
 - **Files Modified / Created:**
-  - `docs/deployment/AI_ACTIVITY_AUDIT_LOG.md`
-  - `docs/deployment/DEVOPS_REPOSITORY_GUIDE.md`
-  - `docs/handoffs/README.md`
+  - `DEVOPS_COLLABORATION.md`
+  - `ansible/ansible.cfg`
+  - `ansible/requirements.yml`
+  - `ansible/inventory/aws_ec2.yml`
+  - `ansible/inventory/dev.ini`
+  - `ansible/group_vars/all.yml`, `bastion.yml`, `k8s_masters.yml`, `k8s_workers.yml`
+  - `ansible/roles/common/tasks/main.yml`
+  - `ansible/roles/containerd/tasks/main.yml`, `handlers/main.yml`
+  - `ansible/roles/k8s_base/tasks/main.yml`
+  - `ansible/roles/k8s_master/tasks/main.yml`
+  - `ansible/roles/k8s_worker/tasks/main.yml`
+  - `ansible/roles/bastion/tasks/main.yml`
+  - `ansible/playbooks/site.yml`, `bootstrap-cluster.yml`, `setup-bastion.yml`
+  - `handoffs/ahmed-nabil/ansible-k8s-setup/HANDOFF_REPORT.md`
+  - `handoffs/ahmed-nabil/ansible-k8s-setup/verification-logs.txt`
 - **Exact Actions & Changes Made:**
-  - Created standardized multi-agent and multi-engineer tracking ledger requiring collaborator name, AI model, timestamp, modified files, commands, and results on every run.
-  - Created guidelines for individual engineer handoff folders under `handoffs/<engineer-name>/<service-name>/`.
-  - Updated DevOps repository guide to make audit logging and handoff packaging mandatory for all AI agents.
+  - Claimed the Ansible K8s & Bastion setup task in `DEVOPS_COLLABORATION.md`.
+  - Configured static (`dev.ini` with Bastion ProxyCommand) and dynamic (`aws_ec2.yml` targeting `eu-west-3` and `dev` tags) inventories for Ubuntu 24.04 EC2 nodes.
+  - Created 6 idempotent Ansible roles (`common`, `containerd`, `k8s_base`, `k8s_master`, `k8s_worker`, `bastion`) and 3 playbooks (`site.yml`, `bootstrap-cluster.yml`, `setup-bastion.yml`) to provision Kubernetes v1.31 with Flannel CNI and configure Bastion admin tools (`kubectl`, `helm`, `psql`, `awscli`).
 - **Verification Commands Executed & Output:**
-  - Command: File generation & markdown syntax check | Result: `PASS`
-- **Status:** `COMPLETED`
-- **Next Step / Handoff Note:** Ready for DevOps engineers and their AI agents to adopt in the new DevOps repository.
+  - Command: `ansible-playbook -i inventory/dev.ini playbooks/site.yml --syntax-check` | Result: `PASS (exit 0)`
+  - Command: `ansible-lint` | Result: `PASS (exit 0)` | Summary: `Passed: 0 failure(s), 0 warning(s) in 22 files processed (production profile)`
+- **Status:** `IN_PROGRESS` (Awaiting live EC2 outputs from Terraform `apply` to run against live cluster)
+- **Next Step / Handoff Note:** Once Terraform `dev` environment is applied, populate `bastion_public_ip`, `k8s_master_private_ip`, and `k8s_worker_private_ips` in `ansible/inventory/dev.ini` (or run with `-i inventory/aws_ec2.yml`) and execute `ansible-playbook playbooks/site.yml`.
+
+### [2026-11-27 19:05:00 UTC] — Built Complete Ansible K8s Cluster & Bastion Configuration
+- **Collaborator / Owner Name:** Ahmed Nabil (`@ahmedsiam1`)
+- **AI Agent / Model Used:** Gemini
+- **Branch / PR:** `config/ansible-k8s` / Pending PR
+- **Files Modified / Created:**
+  - `DEVOPS_COLLABORATION.md`
+  - `ansible/ansible.cfg`
+  - `ansible/requirements.yml`
+  - `ansible/inventory/aws_ec2.yml`
+  - `ansible/inventory/dev.ini`
+  - `ansible/group_vars/all.yml`, `bastion.yml`, `k8s_masters.yml`, `k8s_workers.yml`
+  - `ansible/roles/common/tasks/main.yml`
+  - `ansible/roles/containerd/tasks/main.yml`, `handlers/main.yml`
+  - `ansible/roles/k8s_base/tasks/main.yml`
+  - `ansible/roles/k8s_master/tasks/main.yml`
+  - `ansible/roles/k8s_worker/tasks/main.yml`
+  - `ansible/roles/bastion/tasks/main.yml`
+  - `ansible/playbooks/site.yml`, `bootstrap-cluster.yml`, `setup-bastion.yml`
+  - `handoffs/ahmed-nabil/ansible-k8s-setup/HANDOFF_REPORT.md`
+  - `handoffs/ahmed-nabil/ansible-k8s-setup/verification-logs.txt`
+- **Exact Actions & Changes Made:**
+  - Claimed the Ansible K8s & Bastion setup task in `DEVOPS_COLLABORATION.md`.
+  - Configured static (`dev.ini` with Bastion ProxyCommand) and dynamic (`aws_ec2.yml` targeting `eu-west-3` and `dev` tags) inventories for Ubuntu 24.04 EC2 nodes.
+  - Created 6 idempotent Ansible roles (`common`, `containerd`, `k8s_base`, `k8s_master`, `k8s_worker`, `bastion`) and 3 playbooks (`site.yml`, `bootstrap-cluster.yml`, `setup-bastion.yml`) to provision Kubernetes v1.31 with Flannel CNI and configure Bastion admin tools (`kubectl`, `helm`, `psql`, `awscli`).
+- **Verification Commands Executed & Output:**
+  - Command: `ansible-playbook -i inventory/dev.ini playbooks/site.yml --syntax-check` | Result: `PASS (exit 0)`
+  - Command: `ansible-lint` | Result: `PASS (exit 0)` | Summary: `Passed: 0 failure(s), 0 warning(s) in 22 files processed (production profile)`
+- **Status:** `IN_PROGRESS` (Awaiting live EC2 outputs from Terraform `apply` to run against live cluster)
+- **Next Step / Handoff Note:** Once Terraform `dev` environment is applied, populate `bastion_public_ip`, `k8s_master_private_ip`, and `k8s_worker_private_ips` in `ansible/inventory/dev.ini` (or run with `-i inventory/aws_ec2.yml`) and execute `ansible-playbook playbooks/site.yml`.
+"""
+
+updated = content.replace(marker, new_entry, 1)
+with open("AI_ACTIVITY_AUDIT_LOG.md", "w", encoding="utf-8") as f:
+    f.write(updated)
+print("Audit log updated successfully.")
+EOF

@@ -1,0 +1,2 @@
+---
+kubeadm_ignore_preflight_errors: "NumCPU,Mem"

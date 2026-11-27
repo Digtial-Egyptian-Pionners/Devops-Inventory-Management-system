@@ -6,7 +6,7 @@
 | Engineer / AI Agent | Task Description | Target Paths | Started At | Status |
 |---|---|---|---|---|
 | *Unclaimed* | Terraform AWS foundation | `terraform/` | — | PENDING |
-| *Unclaimed* | Ansible K8s & Bastion setup | `ansible/` | — | PENDING |
+| Ahmed Nabil (`@ahmedsiam1`) | Ansible K8s & Bastion setup | `ansible/` | 2026-11-27 | IN PROGRESS |
 | *Unclaimed* | Helm charts & monitoring | `helm/` | — | PENDING |
 | *Unclaimed* | GitHub Actions CI/CD | `.github/workflows/` | — | PENDING |
 

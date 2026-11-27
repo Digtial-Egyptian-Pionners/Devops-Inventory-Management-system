@@ -1,0 +1,6 @@
+---
+- name: Bootstrap Kubernetes Cluster
+  ansible.builtin.import_playbook: bootstrap-cluster.yml
+
+- name: Configure Bastion Host and Distribute Kubeconfig
+  ansible.builtin.import_playbook: setup-bastion.yml

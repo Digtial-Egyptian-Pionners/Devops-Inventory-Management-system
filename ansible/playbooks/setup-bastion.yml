@@ -1,0 +1,7 @@
+---
+- name: Configure Bastion Host with Admin & DB Tools
+  hosts: bastion
+  become: true
+  roles:
+    - common
+    - bastion
