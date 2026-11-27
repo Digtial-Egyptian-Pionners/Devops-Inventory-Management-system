@@ -1,31 +1,48 @@
 ---
-- name: Install PostgreSQL client and AWS CLI on Bastion
+- name: Install PostgreSQL client and unzip on Bastion
   ansible.builtin.apt:
     name:
       - postgresql-client
-      - awscli
       - unzip
     state: present
     update_cache: true
 
+- name: Download AWS CLI v2 installer
+  ansible.builtin.get_url:
+    url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+    dest: /tmp/awscliv2.zip
+    mode: "0644"
+
+- name: Extract AWS CLI v2 installer
+  ansible.builtin.unarchive:
+    src: /tmp/awscliv2.zip
+    dest: /tmp
+    remote_src: true
+    creates: /tmp/aws/install
+
+- name: Install AWS CLI v2
+  ansible.builtin.command: /tmp/aws/install
+  args:
+    creates: /usr/local/bin/aws
+
 - name: Download kubectl binary
   ansible.builtin.get_url:
-    url: "https://dl.k8s.io/release/{{ kubectl_version }}/bin/linux/amd64/kubectl"
+    url: "https://dl.k8s.io/release/v1.31.4/bin/linux/amd64/kubectl"
     dest: /usr/local/bin/kubectl
     mode: "0755"
 
-- name: Download Helm installation script
+- name: Download Helm installer script
   ansible.builtin.get_url:
-    url: "{{ helm_install_script_url }}"
+    url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
     dest: /tmp/get_helm.sh
     mode: "0700"
 
-- name: Install Helm 3
+- name: Install Helm binary
   ansible.builtin.command: /tmp/get_helm.sh
   args:
     creates: /usr/local/bin/helm
 
-- name: Create .kube directory on Bastion for ubuntu user
+- name: Ensure .kube directory exists for ubuntu user on Bastion
   ansible.builtin.file:
     path: /home/ubuntu/.kube
     state: directory
@@ -33,11 +50,10 @@
     group: ubuntu
     mode: "0755"
 
-- name: Copy cluster kubeconfig to Bastion if available locally
+- name: Copy cluster kubeconfig to Bastion
   ansible.builtin.copy:
     src: /tmp/apex-admin.conf
-    dest: /home/ubuntu/.kube/config
+    dest: "{{ bastion_kubeconfig_path }}"
     owner: ubuntu
     group: ubuntu
     mode: "0600"
-  when: lookup('ansible.builtin.fileglob', '/tmp/apex-admin.conf') | length > 0

@@ -62,3 +62,12 @@
     - { key: "net.bridge.bridge-nf-call-iptables", value: "1" }
     - { key: "net.bridge.bridge-nf-call-ip6tables", value: "1" }
     - { key: "net.ipv4.ip_forward", value: "1" }
+
+- name: Install required Kubernetes networking dependencies
+  ansible.builtin.apt:
+    name:
+      - conntrack
+      - socat
+      - ebtables
+    state: present
+    update_cache: true
