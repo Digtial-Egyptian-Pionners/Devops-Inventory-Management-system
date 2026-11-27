@@ -37,3 +37,38 @@ output "rds_secret_name" {
   description = "AWS Secrets Manager secret name storing RDS credentials"
   value       = module.rds.rds_secret_name
 }
+
+output "alb_dns_name" {
+  description = "Public ALB DNS name for Inventory API"
+  value       = module.alb.alb_dns_name
+}
+
+output "api_gateway_endpoint" {
+  description = "API Gateway HTTP API endpoint for Notification Lambda"
+  value       = module.lambda_apigw.api_gateway_endpoint
+}
+
+output "lambda_function_name" {
+  description = "Notification Lambda function name"
+  value       = module.lambda_apigw.lambda_function_name
+}
+
+output "s3_frontend_bucket_name" {
+  description = "Private S3 bucket name for React SPA"
+  value       = module.s3_cloudfront.s3_frontend_bucket_name
+}
+
+output "cloudfront_distribution_id" {
+  description = "CloudFront distribution ID"
+  value       = module.s3_cloudfront.cloudfront_distribution_id
+}
+
+output "cloudfront_domain_name" {
+  description = "CloudFront HTTPS domain name"
+  value       = module.s3_cloudfront.cloudfront_domain_name
+}
+
+output "ecr_repository_url" {
+  description = "Amazon ECR repository URL for inventory-service"
+  value       = aws_ecr_repository.inventory_service.repository_url
+}

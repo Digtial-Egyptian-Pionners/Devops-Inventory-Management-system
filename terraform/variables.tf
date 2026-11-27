@@ -28,10 +28,16 @@ variable "allowed_ssh_cidr" {
   default     = "0.0.0.0/0"
 }
 
-variable "ec2_instance_type" {
-  description = "Free-tier EC2 instance type for Bastion and K8s nodes"
+variable "bastion_instance_type" {
+  description = "Free-tier EC2 instance type for Bastion host"
   type        = string
   default     = "t3.micro"
+}
+
+variable "ec2_instance_type" {
+  description = "Free-tier EC2 instance type for Kubernetes nodes (t3.small = 2GB RAM, free-tier eligible in eu-west-3)"
+  type        = string
+  default     = "t3.small"
 }
 
 variable "k8s_worker_count" {
@@ -41,7 +47,7 @@ variable "k8s_worker_count" {
 }
 
 variable "enable_nat_gateway" {
-  description = "Enable NAT Gateway for private subnets (not Free Tier; keep false for minimal free-tier validation)"
+  description = "Use managed AWS NAT Gateway instead of Free-Tier Bastion NAT (not Free Tier)"
   type        = bool
   default     = false
 }
