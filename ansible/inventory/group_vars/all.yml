@@ -1,0 +1,9 @@
+---
+k8s_version: "1.31"
+k8s_repo_url: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/"
+pod_network_cidr: "10.244.0.0/16"
+service_cidr: "10.96.0.0/12"
+kubeadm_ignore_preflight_errors: "NumCPU,Mem"
+kubeconfig_dest: "/home/ubuntu/.kube/config"
+flannel_manifest_url: "https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml"
+bastion_kubeconfig_path: "/home/ubuntu/.kube/config"
